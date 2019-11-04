@@ -40,7 +40,7 @@
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0 iconUser">
         <li class="navbar-brand dropdown no-arrow">
-          <div class="nomeUser">Dr Fulano</div>
+          <div class="nomeUser"><?= $_SESSION['usuario']?></div>
         </li>
 
 

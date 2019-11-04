@@ -5,7 +5,7 @@
     include 'header.php';
     include 'menuLateral.php';
     mostraAlerta();
-    
+
 ?>
     <div id="content-wrapper">
 
@@ -14,9 +14,9 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="#">Usuário</a>
           </li>
-          <li class="breadcrumb-item active">Cadastrar Usuário</li>
+          <li class="breadcrumb-item active">Cadastrar</li>
         </ol>
         <!--form  search -->
       <fieldset class="form-group">

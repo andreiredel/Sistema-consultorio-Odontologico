@@ -14,7 +14,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="#">Usuário</a>
           </li>
           <li class="breadcrumb-item active">Editar Dados</li>
         </ol>
@@ -23,7 +23,9 @@
         <legend>Editar Dados</legend>
             <div class="card-body">
                 <form action='../Controller/UsuarioController.php' method='POST'>
-                    <input type="hidden" name="operation" value="create">
+                    <input type="hidden" name="operation" value="update">
+                    <input type='hidden' name='id' id='id' value='<?= $_SESSION['id'] ?>'>
+                    <input type='hidden' name='tipoUsuario' id='tipoUsuario' value='profissional'>
                     <div class="form-group">
                             <div class="form-label-group">
                               <input type="text" id="nome" name='nome' class="form-control" placeholder="Nome do Uuário" required="required" autofocus="autofocus">
@@ -49,16 +51,8 @@
                             <label for="senha">Senha</label>
                             </div>
                     </div>
-                    <?php
-                      if(isset($_SESSION['mensagem'])){
-                    ?>
-                        <div class="alert alert-<?= $_SESSION['status']?>" role="alert" style='text-align: center;'>
-                          <?= $_SESSION['mensagem']?>
-                        </div>
-                      <?php
-                      }
-                    ?> 
-                    <button class="btn btn-primary btn-block" type='submit' >Salvar</button>
+                    <div class="form-group" id='mensagemRetorno'></div>
+                    <button class="btn btn-primary btn-block" type='button' onclick='salvarDados();' >Salvar</button>
                 </form>
             </div>
         
@@ -172,6 +166,43 @@
 
           $('#modalExemplo').modal('show');
           
+          var tipoUsuario = $('#tipoUsuario').val();
+          var id = $('#id').val();
+          console.log('id: ', id);
+          console.log("tipo_busca: ", tipoUsuario);
+          var idTipo = 'id_'+tipoUsuario;
+          $.ajax({
+              url: "../Controller/UsuarioController.php",
+              type: "POST",
+              data : {
+                  operation : "getDados",
+                  id_usuario : id,
+                  tipo_Usuario : tipoUsuario
+              }
+
+          }).done(function(resposta) {
+
+            if(resposta){
+                var retorno = JSON.parse(resposta);
+                console.log('resposta', retorno);
+                let id = retorno[idTipo];
+                $('#idUsuario').val(id);
+                let nome = retorno['nome'];
+                $('#nome').val(nome);
+                let telefone = retorno['telefone'];
+                $('#telefone').val(telefone);
+                let email = retorno['email'];
+                $('#email').val(email);
+                let acesso = retorno['acessosistema'];
+                $('#tipoAntesUpdate').val(tipoUsuario);
+                $('#created_at').val(retorno['created_at']);
+                console.log('acesso: ', acesso);
+                $('#input_'+acesso).click();
+                $('#input_'+retorno['tipousuario']).click();
+
+            }  
+          });
+         
           $('#showPassword').on('click', function(){
 
             console.log('teste');
@@ -190,6 +221,46 @@
             }
           });
         }); 
+
+
+      function salvarDados(){
+      console.log('salvar dados do form');
+      var nome = ($( "#nome" ).val()) ?  $( "#nome" ).val() : false ;
+      var telefone = ($( "#telefone" ).val())? $( "#telefone" ).val() : false;
+      var email = ($( "#email" ).val())? $( "#email" ).val() : false ;
+      var senha = ($( "#senha" ).val()) ? $( "#senha" ).val() : false ;
+      var tipoUsuario = $("#tipoUsuario").val();
+      var acesso = $("input[name='acesso']:checked").val();
+      var idUsuario = $('#id').val();
+   
+      console.log('id: ', idUsuario);
+      $.ajax({
+          url: "../Controller/UsuarioController.php",
+          type: "POST",
+          data : {
+              operation : "editar",
+              id :idUsuario ,
+              tipoUsuario : 'tipoUsuario',
+              nome : nome,
+              telefone : telefone,
+              email :email,
+              senha : senha,
+              acesso : acesso,
+              tipoUsuario : tipoUsuario
+          }
+      }).done(function(resposta) {
+        console.log('resposta: ', resposta);
+        var retorno = JSON.parse(resposta);
+        var mensagem  = `<div class="alert alert-${retorno.status}" id='mensagemEditar' role="alert" style='text-align: center;'>
+                          ${retorno.mensagem}
+                        </div>`; 
+        $('#mensagemRetorno').html(mensagem);
+        console.log('id usuario: ', idUsuario);
+        $("#nome_"+idUsuario).html(nome);
+      });
+
+
+  }
 
     </script>
 

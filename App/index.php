@@ -1,3 +1,14 @@
+<?php
+    session_start();
+    $_SESSION['usuario'] = 'Dr josé';
+    $_SESSION['id'] = 36;
+    
+    
+    
+    
+    
+?>
+
 <!DOCTYPE html>
 
 <html lang="en">

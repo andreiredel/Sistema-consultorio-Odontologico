@@ -14,7 +14,7 @@
       <div class="dropdown-menu" aria-labelledby="pagesDropdown">
         <a class="dropdown-item" href="cadastrarUsuario.php">Cadastrar</a>
         <a class="dropdown-item" href="editarUsuarioPaciente.php">Editar</a>
-        <a class="dropdown-item" href="listarUsuario.php">Visualizar</a>
+        <a class="dropdown-item" href="listarUsuario.php">Listar</a>
       </div>
     </li>
     <li class="nav-item dropdown">
@@ -24,7 +24,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="cadastrarAgendamento.php">Cadastrar</a>
-          <a class="dropdown-item" href="listarAgendamentos.php">Visualizar</a>
+          <a class="dropdown-item" href="listarAgendamentos.php">Listar</a>
         </div>
     </li>
     <li class="nav-item ">

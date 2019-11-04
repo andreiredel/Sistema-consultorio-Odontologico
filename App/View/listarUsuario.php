@@ -24,9 +24,9 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="#">Usuário</a>
           </li>
-          <li class="breadcrumb-item active">Usuarios</li>
+          <li class="breadcrumb-item active">Listar</li>
         </ol>
         <!--form  search -->
       <fieldset class="form-group">
@@ -226,6 +226,17 @@
   <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
 
   <script>
+
+        $('#radioBtn label').on('click', function(e){
+          var sel = $(this).data('title');
+          var tog = $(this).data('toggle');
+          console.log("sel: ", sel);
+          console.log("tog: ", tog);
+          $('#'+tog).prop('value', sel);
+          
+          $('label[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+          $('label[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+        }) 
 
     function buscarDados(id, tipoUsuario){
       document.getElementById("editarUsuario").reset();

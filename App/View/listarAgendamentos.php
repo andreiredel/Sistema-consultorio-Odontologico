@@ -12,9 +12,9 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="#">Agendamento</a>
           </li>
-          <li class="breadcrumb-item active">Agendamentos</li>
+          <li class="breadcrumb-item active">Visualizar</li>
         </ol>
         <!--form  search -->
       <fieldset class="form-group">
