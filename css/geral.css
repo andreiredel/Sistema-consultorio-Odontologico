@@ -1,0 +1,26 @@
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    padding-left:10px!important;
+}	
+
+legend
+{
+    font-size:20px;
+    text-align: center;
+    margin-bottom: 0px; 
+    width: 25% !important; 
+    border-radius: 4px; 
+    padding: 5px 5px 5px 5px; 
+    background-color: #ffffff;
+}
+
+.iconUser{
+    margin-left: auto !important;
+
+}
