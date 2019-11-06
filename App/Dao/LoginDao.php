@@ -8,7 +8,7 @@ class LoginDao{
     
     public function __construct()
     {
-        $this->connect = new \App\Model\Conexao();
+        $this->connect = new \App\Util\Conexao();
     }
 
     public function selectLogin($user, $tipoUsuario)
