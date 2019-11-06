@@ -12,8 +12,8 @@ switch($operation){
         $retorno = editarUsuario();
         echo json_encode($retorno);
         break;
-    case 'remover':
-
+    case 'editarMeusDados':
+        editarMeusDados();
         break;
     case 'listar':
 
@@ -31,10 +31,14 @@ switch($operation){
 
 function createUsuario(){
 
+    $options=[
+        'cost' => 12,
+      ];
+
     $usuario = new \App\Model\Usuario();
-    $usuario->setNome(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING));
+    $usuario->setNome(trim(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)));
     $usuario->setEmail(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING));
-    $usuario->setSenha(sha1(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING)));
+    $usuario->setSenha(password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, $options));
     $usuario->setAcessoSistema(filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING));
     $usuario->setTipoUsuario(filter_input(INPUT_POST, 'tipoUsuario', FILTER_SANITIZE_STRING));
     $usuario->setTelefone(filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING));
@@ -48,23 +52,25 @@ function createUsuario(){
     echo 'retorno<br/>';
     var_dump($retorno);
     if($retorno){
-        $_SESSION['text'] = 'cadastro realizado com sucesso !!';
-        $_SESSION['status'] = 'success';
-
-        echo '<pre>session controller';
-            print_r($_SESSION);
-        echo '</pre>';
-
+        $_SESSION['mensagemModal'] = 'cadastro realizado com sucesso !!';
+        $_SESSION['statusModal'] = 'success';
         header("Location: ../view/cadastrarUsuario.php");
     }else{
-        $_SESSION['text'] = 'Não foi possivel realizar o cadastro';
-        $_SESSION['status'] = 'danger';
+        $_SESSION['mensagemModal'] = 'Não foi possivel realizar o cadastro';
+        $_SESSION['statusModal'] = 'danger';
         header("Location: ../view/cadastrarUsuario.php");
     }
         
 }
 
-function listar(){
+function verificaSessao(){
+    // Verifica se não há a variável da sessão que identifica o usuário
+  if (!isset($_SESSION['UsuarioID'])) {
+    // Destrói a sessão por segurança
+    session_destroy();
+    // Redireciona o visitante de volta pro login
+    header("Location: index.php"); exit;
+}
 
     
 }
@@ -77,7 +83,48 @@ function getDados(){
     return $usuarioDao->getDados($idUsuario, $tipoUsuario);
 }
 
+function editarMeusDados(){
+
+    $date = new DateTime();
+    $date = $date->format('d-m-Y');
+    $options=[
+        'cost' => 12,
+      ];
+
+    $tipoAnterior = filter_input(INPUT_POST, 'tipoAntesUpdate', FILTER_SANITIZE_STRING);
+
+    $dados = array(
+        "id" => filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING),
+        "nome" => (filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)? trim(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)) : NULL ),
+        "email" => (filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING) : NULL ),
+        "senha" => (filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING)? password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, $options) : NULL ),
+        "acesso" => (filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING) : NULL ),
+        "tipoUsuario" => (filter_input(INPUT_POST, 'tipoUsuario', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'tipoUsuario', FILTER_SANITIZE_STRING) : $tipoAnterior ),
+        "telefone" => (filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING) : NULL ),
+        "update" => $date
+    );
+
+    $usuarioDao = new App\Dao\UsuarioDao();
+    $retorno = $usuarioDao->update($dados);
+    if($retorno){
+        $_SESSION['nome'] = $dados['nome'];
+        $_SESSION['mensagemModal'] = 'Dados salvo com sucesso !!';
+        $_SESSION['statusModal'] =  'success';
+        header("Location: ../view/editarMeusDados.php");
+    }else{
+      
+        $_SESSION['mensagemModal'] = 'Não foi possivel salvar os dados !!';
+        $_SESSION['statusModal'] =  'danger';
+        header("Location: ../view/editarMeusDados.php");
+    }
+
+}
+
 function editarUsuario(){
+
+    $options=[
+        'cost' => 12,
+      ];
 
     $date = new DateTime();
     $date = $date->format('d-m-Y');
@@ -86,20 +133,21 @@ function editarUsuario(){
 
     $dados = array(
         "id" => filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING),
-        "nome" => (filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING) : FALSE ),
-        "email" => (filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING) : FALSE ),
-        "senha" => (filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING) : FALSE ),
-        "acesso" => (filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING) : FALSE ),
+        "nome" => (filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)? trim(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING)) : NULL ),
+        "email" => (filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING) : NULL ),
+        "senha" => (filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING)? password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, $options) : NULL ),
+        "acesso" => (filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'acesso', FILTER_SANITIZE_STRING) : NULL ),
         "tipoUsuario" => (filter_input(INPUT_POST, 'tipoUsuario', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'tipoUsuario', FILTER_SANITIZE_STRING) : $tipoAnterior ),
-        "telefone" => (filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING) : FALSE ),
+        "telefone" => (filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING)? filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING) : NULL ),
         "update" => $date
     );
-    
+
     $usuarioDao = new App\Dao\UsuarioDao();
     $retorno = $usuarioDao->update($dados);
     if($retorno){
         $mensagem= 'Dados salvo com sucesso !!';
         $operation = 'success';
+        $_SESSION['nome'] = $dados['nome'];
         $array = array('mensagem'=> $mensagem , 'status'=> $operation);
     }else{
       

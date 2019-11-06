@@ -18,96 +18,54 @@
         </ol>
         <!--form  search -->
       <fieldset class="form-group">
-        <legend>Listar Agendamentos</legend>
-        <div class="card mb-3">
-          <div class="col-12 col-md-10 col-lg-8" style="margin: auto;">
-              <form class="searchRecord">
-                  <div class="card-body row no-gutters align-items-center">
-                      <!--end of col-->
-                      <div class="col">
-                          <input class="form-control form-control-md form-control-borderless" type="search" placeholder="Digite o nome do paciente">
-                      </div>
-                      <!--end of col-->
-                      <div class="col-auto">
-                          <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
-                      </div>
-                      <!--end of col-->
-                  </div>
-              </form>
-          </div>
-          <!--end of col-->
-        </div>
+        <legend>Registros de atendimentos</legend>
           <!--end form search-->
       
         <!-- DataTables Example -->
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-table"></i>
-            Lista de Agendamentos
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align: center;">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Paciente</th>
-                    <th>Profissional</th>
-                    <th>Procedimento</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>12/09/2019</td>
-                    <td>Paulo</td>
-                    <td>Pedro</td>
-                    <td>Limpeza</td>
-                    <td>Agendado</td>
-                    <td>
-                        <button class="btn btn-md btn-danger" type="submit"><i class="fas fa-times-circle"></i> Cancelar Agendamento</button>
-                        <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Editar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>18/09/2019</td>
-                    <td>Marcos</td>
-                    <td>Pedro</td>
-                    <td>Limpeza</td>
-                    <td>Agendado</td>
-                    <td>
-                        <button class="btn btn-md btn-danger" type="submit"><i class="fas fa-times-circle"></i> Cancelar Agendamento</button>
-                        <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Editar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>22/09/2019</td>
-                    <td>Fernando</td>
-                    <td>Pedro</td>
-                    <td>Limpeza</td>
-                    <td>Cancelado</td>
-                    <td>
-                        <button class="btn btn-md btn-danger" type="submit"><i class="fas fa-times-circle"></i> Cancelar Agendamento</button>
-                        <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Editar</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>30/09/2019</td>
-                    <td>Joaquin</td>
-                    <td>Pedro</td>
-                    <td>Limpeza</td>
-                    <td>Agendado</td>
-                    <td>
-                        <button class="btn btn-md btn-danger" type="submit"><i class="fas fa-times-circle"></i> Cancelar Agendamento</button>
-                        <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Editar</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <!-- DataTables Example -->
+        <div class="card mb-3" id='history'>
+                                    <div class="card-header">
+                                        <i class="fas fa-table"></i>
+                                         Registro de atendimento
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align: center;">
+                                            <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Operação</th>
+                                                <th>Profissional</th>
+                                                <th>Paciente</th>
+                                                <th>Descrição</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>12/09/2019</td>
+                                                <td>Insert</td>
+                                                <td>Dr Pedro</td>
+                                                <td>Paulo</td>
+                                                <td>Limpeza</td>
+                                            </tr>
+                                            <tr>
+                                                <td>18/09/2019</td>
+                                                <td>Update</td>
+                                                <td>Dr Carlos</td>
+                                                <td>Maria</td>
+                                                <td>Limpeza 2</td>
+                                            </tr>
+                                            <tr>
+                                                <td>22/09/2019</td>
+                                                <td>Delete</td>
+                                                <td>Dr Paulo</td>
+                                                <td>Mario</td>
+                                                <td>Limpeza 3</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
       </fieldset>
       </div>
       <!-- /.container-fluid -->

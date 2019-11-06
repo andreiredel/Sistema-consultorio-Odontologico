@@ -45,6 +45,7 @@
                             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Exame Físico</a>
                             <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false">Exame Clínico</a>
                             <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false">Exame Periodontal</a>
+                            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false">Registro de Atendimento</a>
                             </div>
                         </nav>
                         <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
@@ -338,76 +339,73 @@
                                 <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
                                 <form>
                                     <div class="row">
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-5">
                                                 <div class="form-label-group">
-                                                <input type="text" id="firstName" class="form-control" placeholder="Nome do Paciente" required="required" autofocus="autofocus">
-                                                <label for="firstName">Cidade</label>
+                                                <input type="text" id="data" class="form-control" placeholder="Data" required="required" autofocus="autofocus">
+                                                <label for="data">Data</label>
                                                 </div>
                                         </div>
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-5">
                                                 <div class="form-label-group">
-                                                <input type="text" id="lastName" class="form-control" placeholder="Nome do Profissional" required="required">
-                                                <label for="lastName">Profissão</label>
+                                                <input type="text" id="descricaoAtendimento" class="form-control" placeholder="Digite o procedimento realizado" required="required">
+                                                <label for="descricaoAtendimento">Digite o procedimento realizado</label>
                                                 </div>
                                         </div>
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="lastName" class="form-control" placeholder="Nome do Profissional" required="required">
-                                                <label for="lastName">Cep</label>
-                                                </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                                <div class="form-label-group">
-                                                <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
-                                                <label for="procedimento">Procedimento</label>
-                                                </div>
-                                        </div>
+                            
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="form-label-group" style="float: right;">
+                                            <button class="btn btn-md btn-success" type="button" data-toggle="modal" data-target="#modalEditar" onclick='$("#history").css("display", "block");'><i class="fas fa-history"></i> Visualizar registros de atendimentos</button>
                                                 <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Salvar</button>
                                             </div>
                                         </div>
                                     </div>
                                     
                                 </form>
+                                <!-- DataTables Example -->
+                                    <div class="card mb-3" id='history' style='display:none'>
+                                    <div class="card-header">
+                                        <i class="fas fa-table"></i>
+                                         Registro de atendimento
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align: center;">
+                                            <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Operação</th>
+                                                <th>Usuário</th>
+                                                <th>Descrição</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>12/09/2019</td>
+                                                <td>Insert</td>
+                                                <td>Dr Pedro</td>
+                                                <td>Limpeza</td>
+                                            </tr>
+                                            <tr>
+                                                <td>18/09/2019</td>
+                                                <td>Update</td>
+                                                <td>Dr Carlos</td>
+                                                <td>Limpeza 2</td>
+                                            </tr>
+                                            <tr>
+                                                <td>22/09/2019</td>
+                                                <td>Delete</td>
+                                                <td>Dr Paulo</td>
+                                                <td>Limpeza 3</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                    </div>
                                 </div>
-                        </div>
+                                
                     </div>
               </div>
         </div>
@@ -442,25 +440,6 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Bootstrap core JavaScript-->
   <script src="../../componentes/jquery/jquery.min.js"></script>

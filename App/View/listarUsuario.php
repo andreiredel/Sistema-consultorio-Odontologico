@@ -5,12 +5,7 @@
   include 'menuLateral.php';
 
   $usuarioDao = new App\Dao\UsuarioDao();
-  // $listaPaciente = $usuarioDao->read('paciente');
 
-  // $listaProfissional = $usuarioDao->read('profissional');
-
-
-  // $result = array_merge($listaPaciente, $listaProfissional);
     if(isset($_SESSION['buscaUsuarios']) ){
       $result = $_SESSION['buscaUsuarios'];
       unset($_SESSION['buscaUsuarios']);
@@ -140,25 +135,25 @@
                     <input type="hidden" id='created_at' name="created_at" value=''>
                     <div class="form-group">
                             <div class="form-label-group">
-                              <input type="text" id="nome" name='nome' class="form-control" placeholder="Nome do Uuário" autofocus="autofocus">
+                              <input type="text" id="nome" name='nome' class="form-control" placeholder="Nome do Uuário" autofocus="autofocus" required="required">
                               <label for="nome">Nome</label>
                             </div>
                     </div>
                     <div class="form-group">
                             <div class="form-label-group">
-                              <input type="text" id="telefone" name='telefone' class="form-control" placeholder="(xx) xxxxx xxxx " >
+                              <input type="text" id="telefone" name='telefone' class="form-control" placeholder="(xx) xxxxx xxxx " required="required">
                               <label for="telefone">Telefone</label>
                             </div>
                     </div>
                     <div class="form-group">
                             <div class="form-label-group">
-                              <input type="email" id="email" name='email' class="form-control" placeholder="exemplo@teste.com" >
+                              <input type="email" id="email" name='email' class="form-control" placeholder="exemplo@teste.com" required="required">
                               <label for="email">Email</label>
                             </div>
                     </div>
                     <div class="form-group">
                             <div class="form-label-group">
-                            <input type="password" id="senha" name='senha' class="form-control" placeholder="Digite uma senha com minimo de 8 caracteres" required="required">
+                            <input type="password" id="senha" name='senha' class="form-control" placeholder="Digite uma senha com minimo de 8 caracteres" >
                             <button type="button" id="showPassword" name="showPassword" class="fa fa-eye-slash" aria-hidden="true"></button> 
                             <label for="senha">Senha</label>
                             </div>
@@ -215,23 +210,21 @@
   <!-- Core plugin JavaScript-->
   <script src="../../componentes/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Page level plugin JavaScript-->
-  <!-- <script src="../../componentes/datatables/jquery.dataTables.js"></script>
-  <script src="../../componentes/datatables/dataTables.bootstrap4.js"></script> -->
+  Page level plugin JavaScript-->
+  <script src="../../componentes/datatables/jquery.dataTables.js"></script>
+  <script src="../../componentes/datatables/dataTables.bootstrap4.js"></script>
 
-  <!-- Custom scripts for all pages-->
+  <!-- Custom scripts for all pages
   <script src="../../js/sb-admin.min.js"></script>
 
-  <!-- Demo scripts for this page-->
-  <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
+   Demo scripts for this page -->
+  <script src="../../js/demo/datatables-demo.js"></script>
 
   <script>
 
         $('#radioBtn label').on('click', function(e){
           var sel = $(this).data('title');
           var tog = $(this).data('toggle');
-          console.log("sel: ", sel);
-          console.log("tog: ", tog);
           $('#'+tog).prop('value', sel);
           
           $('label[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
@@ -282,47 +275,52 @@
 
   function salvarDados(){
       console.log('salvar dados do form');
-      var nome = ($( "#nome" ).val()) ?  $( "#nome" ).val() : false ;
-      var telefone = ($( "#telefone" ).val())? $( "#telefone" ).val() : false;
-      var email = ($( "#email" ).val())? $( "#email" ).val() : false ;
-      var senha = ($( "#senha" ).val()) ? $( "#senha" ).val() : false ;
+      var nome = ($( "#nome" ).val()) ?  $( "#nome" ).val() : '' ;
+      var telefone = ($( "#telefone" ).val())? $( "#telefone" ).val() : '';
+      var email = ($( "#email" ).val())? $( "#email" ).val() : '' ;
+      var senha = ($( "#senha" ).val()) ? $( "#senha" ).val() : '' ;
       var tipoUsuario = $("input[name='tipoUsuario']:checked").val();
       var acesso = $("input[name='acesso']:checked").val();
       var idUsuario = $('#idUsuario').val();
-   
-      console.log('id: ', idUsuario);
-      $.ajax({
-          url: "../Controller/UsuarioController.php",
-          type: "POST",
-          data : {
-              operation : "editar",
-              id :idUsuario ,
-              tipoUsuario : 'tipoUsuario',
-              nome : nome,
-              telefone : telefone,
-              email :email,
-              senha : senha,
-              acesso : acesso,
-              tipoUsuario : tipoUsuario
-          }
-      }).done(function(resposta) {
-        console.log('resposta: ', resposta);
-        var retorno = JSON.parse(resposta);
-        var mensagem  = `<div class="alert alert-${retorno.status}" id='mensagemEditar' role="alert" style='text-align: center;'>
-                          ${retorno.mensagem}
-                        </div>`; 
-        $('#mensagemRetorno').html(mensagem);
-        console.log('id usuario: ', idUsuario);
-        $("#nome_"+idUsuario).html(nome);
-      });
 
+      if(validateEmail(email)) {
+        console.log('id: ', idUsuario);
+        $.ajax({
+            url: "../Controller/UsuarioController.php",
+            type: "POST",
+            data : {
+                operation : "editar",
+                id :idUsuario ,
+                tipoUsuario : 'tipoUsuario',
+                nome : nome,
+                telefone : telefone,
+                email :email,
+                senha : senha,
+                acesso : acesso,
+                tipoUsuario : tipoUsuario
+            }
+        }).done(function(resposta) {
+          console.log('resposta: ', resposta);
+          var retorno = JSON.parse(resposta);
+          var mensagem  = `<div class="alert alert-${retorno.status}" id='mensagemEditar' role="alert" style='text-align: center;'>
+                            ${retorno.mensagem}
+                          </div>`; 
+          $('#mensagemRetorno').html(mensagem);
+          console.log('id usuario: ', idUsuario);
+          $("#nome_"+idUsuario).html(nome);
+        });
+      } else {
+        var mensagem  = `<div class="alert alert-danger" id='mensagemEditar' role="alert" style='text-align: center;'>
+                            Email inválido
+                          </div>`; 
+          $('#mensagemRetorno').html(mensagem);
 
+      }
+      
   }
 
   $(document).ready(function(){
           $('#showPassword').on('click', function(){
-
-            console.log('teste');
             
             var passwordField = $('#senha');
             var passwordFieldType = passwordField.attr('type');
@@ -339,7 +337,14 @@
           });
         }); 
 
-
+        function validateEmail(email) {
+          var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+          if( !emailReg.test( email ) ) {
+              return false;
+          } else {
+              return true;
+          }
+        }
 
 
 

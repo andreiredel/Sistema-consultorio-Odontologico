@@ -1,14 +1,14 @@
 <?php
 function mostraAlerta(){
     //session_start();
-    if(isset($_SESSION['status'])){
+    if(isset($_SESSION['statusModal'])){
 ?>
         <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-body">
                     <?php
-                        if($_SESSION['status'] == 'success'){     
+                        if($_SESSION['statusModal'] == 'success'){     
                     ?>
                     <div class="swal2-icon swal2-success swal2-animate-success-icon" style="display: flex;">
                     <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
@@ -30,8 +30,8 @@ function mostraAlerta(){
                     <?php
                         }        
                     ?>      
-                    <div class="alert alert-<?=$_SESSION['status'] ?>" role="alert" style='text-align: center;'>
-                        <?= $_SESSION['text'] ?>
+                    <div class="alert alert-<?=$_SESSION['statusModal'] ?>" role="alert" style='text-align: center;'>
+                        <?= $_SESSION['mensagemModal'] ?>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -44,7 +44,7 @@ function mostraAlerta(){
             </div>
             
     <?php
-    unset($_SESSION['status']);
-    unset($_SESSION['text']);
+    unset($_SESSION['statusModal']);
+    unset($_SESSION['mensagemModal']);
     }
 }

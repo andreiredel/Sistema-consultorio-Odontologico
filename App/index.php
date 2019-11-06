@@ -1,12 +1,11 @@
 <?php
     session_start();
-    $_SESSION['usuario'] = 'Dr josé';
-    $_SESSION['id'] = 36;
-    
-    
-    
-    
-    
+
+    if(isset($_SESSION['mensagem'])){
+        $mensagem = $_SESSION['mensagem'];
+        unset($_SESSION['mensagem']);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -149,9 +148,9 @@
 
                 <!-- Introduction -->
 
-                <div class="col-md-6 caption" style="padding: 0px;">
+                <div class="col-md-6 caption" style="padding: 0px 10px 0px 10px;background-color: #44c5eecf;border-radius: 10px;">
 
-                    <h1>Bem vindo ao SG-Odonto</h1>
+                    <h1 style='color: black;letter-spacing: -1px;'>Bem vindo ao SG-Odonto</h1>
 
                     <!-- <h2>
 
@@ -163,7 +162,7 @@
 
                         </h2> -->
 
-                    <p>O SG-Odonto é um sistema de gerecinamento de consultório Odontológico. O objetivo do sistema é automatizar o prontuário, tornando assim visível a
+                    <p style='color: black;'>O SG-Odonto é um sistema de gerecinamento de consultório Odontológico. O objetivo do sistema é automatizar o prontuário, tornando assim visível a
                             qualquer momento pelos profissionais e tornar o prontuário um documento mais limpo,
                             organizado e melhor registrado, também melhorar a organização e registro dos
                             agendamentos de pacientes. </p>
@@ -174,7 +173,8 @@
 
                 <div class="col-md-5 col-md-offset-1">
 
-                    <form class="signup-form">
+                    <form class="signup-form" action='Controller/LoginController.php' method='POST'>
+                        <input type="hidden" name="operation" value='login'>
 
                         <h2 class="text-center">Realizar Login</h2>
 
@@ -182,22 +182,32 @@
 
                         <div class="form-group">
 
-                            <input type="text" class="form-control" placeholder="Nome" required="required">
+                            <input type="text" class="form-control" name='nome' placeholder="Nome" required="required">
 
                         </div>
-
-                
-
                         <div class="form-group">
 
-                            <input type="text" class="form-control" placeholder="Senha" required="required">
+                            <input type="password" class="form-control" name='senha' placeholder="Senha" required="required">
 
                         </div>
+                        <?php
+                            if(isset($mensagem)){
+                        ?>
 
+                            <div class="form-group">
+
+                            <div class="alert alert-danger" role="alert">
+                                    <?= $mensagem ?>
+                            </div>
+
+                            </div>
+
+                        <?php           
+                            }
+                        ?>
                         <div class="form-group text-center">
 
-                                <a class="btn btn-primary" href="../App/View/cadastrarUsuario.php">Entrar</a>
-
+                                <button class='btn btn-primary' type="submit">Entrar</button>
                         </div>
 
                     </form>
@@ -223,22 +233,18 @@
     <section id="about" class="section-padding">
 
         <div class="container">
-
-            <h2>About Us</h2>
-
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio, optio.</p>
-
+        
             <div class="row">
 
                 <div class="col-md-4">
 
                     <div class="icon-box">
 
-                        <i class="material-icons">favorite</i>
+                        <i class="material-icons">date_range</i>
 
-                        <h4>Simple To Use</h4>
+                        <h4>Agendamentos</h4>
 
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas minima, dicta quaerat sit cupiditate eum mollitia.</p>
+                        <p>O profissional pode agendar no sistema uma consulta e o paciente entrando no sistema pode visualizar a mesma, podendo efetuar o cancelamento.</p>
 
                     </div>
 
@@ -250,9 +256,9 @@
 
                         <i class="material-icons">flash_on</i>
 
-                        <h4>Powerful</h4>
+                        <h4>Rapidez</h4>
 
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas minima, dicta quaerat sit cupiditate eum mollitia.</p>
+                        <p>Com apenas alguns clicks os dados do prontuário está disponível para você</p>
 
                     </div>
 
@@ -264,9 +270,9 @@
 
                         <i class="material-icons">settings</i>
 
-                        <h4>Easy To Customize</h4>
+                        <h4>Ferramentas</h4>
 
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas minima, dicta quaerat sit cupiditate eum mollitia.</p>
+                        <p>O sistema disponibiliza de funcionalidades que vão facilitar seu dia a dia </p>
 
                     </div>
 

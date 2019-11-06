@@ -13,17 +13,10 @@ class UsuarioDao{
 
     public function create($p)
     {
-            $sql = "INSERT INTO ". $p->getTipoUsuario() ." (nome, senha, email, telefone, tipousuario, acessosistema, created_at, update_at )   VALUES (:nome,:senha, :email,:telefone, :tipousuario,:acessosistema,  :created_at,:update_at)";
+            $sql = "INSERT INTO ". $p->getTipoUsuario() ." (nome, senha, email, telefone, tipousuario, acessosistema, created_at, update_at )".   
+            "VALUES ('".$p->getNome()."','".$p->getSenha()."','".$p->getEmail()."' , '".$p->getTelefone()."','".$p->getTipoUsuario()."','".$p->getAcessoSistema()."', '".$p->getCreated_at()."', '".$p->getUpdate_at()."')";
             $stmt = $this->connect->getInstance()->prepare($sql);
-            $stmt->bindValue(':nome', $p->getNome());
-            $stmt->bindValue(':senha', $p->getSenha());
-            $stmt->bindValue(':email', $p->getEmail());
-            $stmt->bindValue(':telefone', $p->getTelefone());
-            $stmt->bindValue(':acessosistema', $p->getAcessoSistema());
-            $stmt->bindValue(':tipousuario', $p->getTipoUsuario());
-            $stmt->bindValue(':created_at', $p->getCreated_at());
-            $stmt->bindValue(':update_at', $p->getUpdate_at());
-            
+
             if($stmt->execute()){
                 return true;
             }else{
@@ -52,7 +45,7 @@ class UsuarioDao{
 
         $nome = ($dados['nome'])? "nome = '".$dados['nome']."'," : '';
         $email = ($dados['email'])? "email='".$dados['email']."'," : '';
-        $senha = ($dados['senha'])? "senha='".$dados['senha']."'," : '';
+        $senha = ($dados['senha'])? "senha= '".$dados['senha']."'," : '';
         $acesso = ($dados['acesso'])? "acessosistema='".$dados['acesso']."'," : '';
         $tipoUsuario = ($dados['tipoUsuario'])? "tipousuario='".$dados['tipoUsuario']."'," : '';
         $telefone = ($dados['telefone'])? "telefone='".$dados['telefone']."'," : '';
@@ -63,6 +56,7 @@ class UsuarioDao{
         SET ".
             $nome.''. $email.''.$senha.''.$acesso.''.$tipoUsuario.''.$telefone.''.$update
         ." WHERE ". $condicao;
+
         $stmt = $this->connect->getInstance()->prepare($sql);
         if($stmt->execute()){           
             return  true;
