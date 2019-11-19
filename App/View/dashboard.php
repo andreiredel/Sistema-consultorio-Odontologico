@@ -32,7 +32,14 @@
     ?>
       <div class="card mb-3">
           <div class="col-12 col-md-10 col-lg-8" style="margin: auto;">
-              
+          <div class="form-group">
+                          <div class='input-group date' id='datetimepicker3'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <i class="fas fa-sign-out"></i>
+                            </span>
+                          </div>
+                    </div>
           </div>
           <!--end of col-->
         </div>
@@ -71,45 +78,9 @@
 
   <script type="text/javascript" src="../../css/bootstrap/js/moment.min.js"></script>
 
-  <script type="text/javascript" src="../../css/bootstrap/datetimepicker/datetimepicker.min.js"></script>
+  <script src='../../componentes/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'></script>
 
-    <script>
-        $('#radioBtn label').on('click', function(e){
-          var sel = $(this).data('title');
-          var tog = $(this).data('toggle');
-          console.log("sel: ", sel);
-          console.log("tog: ", tog);
-          $('#'+tog).prop('value', sel);
-          
-          $('label[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
-          $('label[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
-        }) 
-
-        $(document).ready(function(){
-
-          $('#modalExemplo').modal('show');
-          
-          $('#showPassword').on('click', function(){
-
-            console.log('teste');
-            
-            var passwordField = $('#senha');
-            var passwordFieldType = passwordField.attr('type');
-            if(passwordFieldType == 'password')
-            {
-                passwordField.attr('type', 'text');
-                $(this).val('Hide');
-                $('#showPassword').attr("class", 'fa fa-eye');
-            } else {
-                passwordField.attr('type', 'password');
-                $(this).val('Show');
-                $('#showPassword').attr("class", 'fa fa-eye-slash');
-            }
-          });
-        }); 
-
-    </script>
-
+   
 </body>
 
 </html>

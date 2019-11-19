@@ -22,8 +22,12 @@
       <fieldset class="form-group">
         <legend>Prontuario Completo</legend>
         <div class="card-body">
-            <button class="btn btn-primary btn-block" type="submit">Gerar PDF</button>
-        </div>
+                    <div class="col-md-12">
+                            <div class="">
+                            <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-cloud-download-alt"></i> Gerar PDF</button>
+                            </div>
+                    </div>
+            </div>
             <div class="card-body">
             <form action="mail.php" method="post">
                         <div class="card border-primary rounded-0">

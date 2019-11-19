@@ -17,15 +17,11 @@ function login(){
     $usuario->setNome(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING));
     $usuario->setSenha(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING));
    
-
+    
     $pacienteDao = new App\Dao\LoginDao();
     $retornoProfissional = $pacienteDao->selectLogin($usuario, 'profissional');
     $retornoPaciente = $pacienteDao->selectLogin($usuario, 'paciente');
 
-    // echo'<pre>';
-    // print_r($retornoProfissional);
-    // echo'</pre>';
-    // die;
     $retornoProfissional = verificaUsuario($retornoProfissional);
     $retornoPaciente = verificaUsuario($retornoPaciente);
 

@@ -115,4 +115,21 @@ class UsuarioDao{
 
 
     }
+    public function getUsuario($tabela){
+
+        $sql = "SELECT  nome, id_".$tabela." as id FROM " .$tabela;
+        
+        $stmt = $this->connect->getInstance()->prepare($sql);
+        if($stmt->execute()){
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return  $result;
+        }else{
+            echo "<pre>sqllll";
+                print_r($stmt->errorInfo());
+            echo "</pre>";
+            return false;
+        }
+
+
+    }
 }

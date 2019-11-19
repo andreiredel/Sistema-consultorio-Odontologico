@@ -150,7 +150,7 @@
 
                 <div class="col-md-6 caption" style="padding: 0px 10px 0px 10px;background-color: #44c5eecf;border-radius: 10px;">
 
-                    <h1 style='color: black;letter-spacing: -1px;'>Bem vindo ao SG-Odonto</h1>
+                    <h1 style='color: black;letter-spacing: -1px;'>Bem-vindo ao SG-Odonto</h1>
 
                     <!-- <h2>
 

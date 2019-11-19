@@ -16,7 +16,8 @@ switch($operation){
         editarMeusDados();
         break;
     case 'listar':
-
+        $retorno = getUsuario();
+        echo json_encode($retorno);
         break;
     case 'getDados':
         $retorno = getDados();
@@ -66,13 +67,12 @@ function createUsuario(){
 function verificaSessao(){
     // Verifica se não há a variável da sessão que identifica o usuário
   if (!isset($_SESSION['UsuarioID'])) {
-    // Destrói a sessão por segurança
-    session_destroy();
-    // Redireciona o visitante de volta pro login
-    header("Location: index.php"); exit;
-}
+        // Destrói a sessão por segurança
+        session_destroy();
+        // Redireciona o visitante de volta pro login
+        header("Location: index.php"); exit;
+    }
 
-    
 }
 
 function getDados(){
@@ -176,5 +176,18 @@ function buscarUsuarios()
     $_SESSION['buscaUsuarios'] = $result;
     header("Location: ../view/listarUsuario.php");
     return $result;
+
+}
+
+function getUsuario(){
+
+        $tipoUsuario = filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_STRING);
+        $usuarioDao = new App\Dao\UsuarioDao();
+        $listaUsuario = $usuarioDao->getUsuario($tipoUsuario);
+        if ($listaUsuario) {
+            return $listaUsuario;
+        } else {
+            return false;
+        }
 
 }
