@@ -20,14 +20,6 @@
       <fieldset class="form-group">
         <legend>Listar Agendamentos</legend>
         <div class="card mb-3">
-        <div class="form-group">
-                          <div class='input-group date' id='datetimepicker3'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="fas fa-alarm-clock"></span>
-                            </span>
-                          </div>
-                    </div>
           <div id='loading'>loading...</div>
 
           <div id='calendar'></div>
@@ -73,6 +65,7 @@
         <div class="card-body">
                 <form id='formAgendamento'>
                     <input type="hidden" id='operation' name="operation" value=''>
+                    <input type="hidden" id='idProfissional' name="idProfissional" value='<?= $_SESSION['id'] ?>'>
                     <div class="form-group">
                             <div class="form-label-group" id='select'>
                             <!-- <input type="text" id="firstName" class="form-control" placeholder="Nome do Paciente" required="required" autofocus="autofocus">
@@ -80,29 +73,27 @@
                             
                             </div>
                     </div>
-                    
-
                     <div class="form-group">
                             <div class="form-label-group">
-                            <input type="text" id="nomeProfissional" class="form-control" placeholder="Nome do Profissional" required="required" value='' disabled="disabled">
+                            <input type="text" id="nomeProfissional" name='nomeProfissional' class="form-control" placeholder="Nome do Profissional" required="required" value='' disabled="disabled">
                             <label for="lastName">Nome Profissional</label>
                             </div>
                     </div>
                     <div class="form-group">
                           <div class="form-label-group">
-                              <input type="text" id="data" class="form-control" placeholder="Data" required="required" autofocus="autofocus"  disabled="disabled">
+                              <input type="text" id="data" name='data' class="form-control" placeholder="Data" required="required" autofocus="autofocus"  >
                               <label for="firstName">Data</label>
                           </div>
                     </div>
                     <div class="form-group">
-                          <div class="form-label-group">
-                              <input type="text" id="horaInicio" class="form-control " placeholder="Hora de inicio" required="required" autofocus="autofocus">
-                              <label for="horaInicial">Hora de inicio</label>
-                          </div>
+                            <div class="form-label-group">
+                              <input type="text" id="inicio" name='inicio' class="form-control" placeholder="Informe a hora de inicio" required="required">
+                              <label for="inicio">Hora de inicio</label>
+                            </div>
                     </div>
                     <div class="form-group">
                           <div class='input-group date' id=''>
-                            <input type='text' class="form-control" />
+                            <input type='text' name='fim' id='fim' class="form-control" />
                             <span class="input-group-addon">
                                 <span class="fas fa-alarm-clock"></span>
                             </span>
@@ -110,7 +101,7 @@
                     </div>
                     <div class="form-group">
                             <div class="form-label-group">
-                            <input type="text" id="procedimento" class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
+                            <input type="text" id="procedimento" name='procedimento' class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
                             <label for="procedimento">Procedimento</label>
                             </div>
                     </div>
@@ -119,8 +110,8 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Voltar</button>
-          <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-          <button class="btn btn-primary" id='salvarAgendamento' onclick=cadastrarAgendamento();>Salvar</button>
+          <button class="btn btn-danger" id='cancelarAgendamento' type="button" data-dismiss="modal">Cancelar Agendamento</button>
+          <button class="btn btn-primary" id='salvar' onclick=cadastrarAgendamento();>Salvar</button>
         </div>
       </div>
     </div>
@@ -187,7 +178,11 @@
       editable: true,
       plugins: [ 'interaction', 'dayGrid', 'list', 'googleCalendar' ],
       events: '../Controller/list_eventos.php?operation=listAgendamento&id=<?= $_SESSION['id']?>&tipo=<?= $_SESSION['tipo']?>',
-      
+      extraParams: function () {
+        return {
+              cachebuster: new Date().valueOf()
+        };
+      },
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -215,6 +210,8 @@
           $('#modalInfoAgendamento #procedimento').val(arg.event.title);
           console.log('dados: ', arg.event);
           $('#operation').val('editar');
+          $('#cancelarAgendamento').css('display', "inline");
+          $('#salvar').html("Salvar"); 
           $('#modalInfoAgendamento').modal('show');
       },
       selectable: true,
@@ -222,7 +219,8 @@
         $('.modal-title').html('Cadastrar Agendamento');
         $('#operation').val('cadastrar');
         $('#nomeProfissional').val('<?= $_SESSION['nome'];?>');
-        let data = 
+        $('#cancelarAgendamento').css('display', "none"); 
+        $('#salvar').html("Cadastrar"); 
         $('#data').val(info.start.toLocaleString());
         $('#modalInfoAgendamento').modal('show');
       },
@@ -231,8 +229,6 @@
         document.getElementById('loading').style.display =
           bool ? 'block' : 'none';
       },
-
-
 
     });
 
@@ -260,10 +256,10 @@
                 if(resposta){
                   var resposta = JSON.parse(resposta);
                   console.log('resposta: ', resposta);
-                  var select = '<select class="selectpicker" data-live-search="true">';
+                  var select = '<select class="selectpicker" name="paciente" data-live-search="true">';
                   select +='<option id="false" data-tokens="usuarios">Selecione um paciente</option>';
                   for(let usuarios in resposta){
-                   select +='<option id='+resposta[usuarios].id+' data-tokens='+resposta[usuarios].id+'>'+resposta[usuarios].nome+'</option>';
+                   select +='<option value='+resposta[usuarios].id+' data-tokens='+resposta[usuarios].id+'>'+resposta[usuarios].nome+'</option>';
                   }
                   select += '</select>';
                   $("#select").html(select);
@@ -288,7 +284,8 @@
             contentyType: false,
             processData: false,
             success: function(retorno){
-
+              var result = JSON.parse(retorno);
+              console.log('result', result);
             }
           })
     

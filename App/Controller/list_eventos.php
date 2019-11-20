@@ -20,8 +20,8 @@ function listaAgendamentos(){
        
     $agendamentoDao = new App\Dao\AgendamentoDao();
     $retornoAgendamento = $agendamentoDao->buscarAgendamentos($usuario);
+    var_dump("agendamentos");
     var_dump($retornoAgendamento);
-    die;
 
     if($retornoAgendamento){
         $retorno = $retornoAgendamento;
