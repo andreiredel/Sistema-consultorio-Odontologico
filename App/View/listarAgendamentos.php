@@ -81,29 +81,40 @@
                     </div>
                     <div class="form-group">
                           <div class="form-label-group">
-                              <input type="text" id="data" name='data' class="form-control" placeholder="Data" required="required" autofocus="autofocus"  >
+                              <input type="text" id="data" name='data' class="form-control" placeholder="Data" required="required" autofocus="autofocus">
                               <label for="firstName">Data</label>
                           </div>
                     </div>
                     <div class="form-group">
-                            <div class="form-label-group">
-                              <input type="text" id="inicio" name='inicio' class="form-control" placeholder="Informe a hora de inicio" required="required">
+                            <!-- <div class="form-label-group">
+                              <input type="text" id="inicio" name='inicio' class="form-control" placeholder="Informe a hora de inicio" required="required" >
                               <label for="inicio">Hora de inicio</label>
+                            </div> -->
+                            <div class="form-label-group content__subsection picker-container">
+                              <input type="text" id="timepicker-inicio" name="inicio" class="form-control timepicker-24-hr" placeholder="Descreva qual sera o procedimento" required="required">
+                              <label for="inicio">Inicio da consulta</label>
                             </div>
                     </div>
                     <div class="form-group">
-                          <div class='input-group date' id=''>
+                          <!-- <div class='input-group date' id=''>
                             <input type='text' name='fim' id='fim' class="form-control" />
                             <span class="input-group-addon">
                                 <span class="fas fa-alarm-clock"></span>
                             </span>
-                          </div>
+                          </div> -->
+                          <div class="form-label-group content__subsection picker-container">
+                              <input type="text" id="timepicker-fim" name="fim" class="form-control timepicker-24-hr" placeholder="Descreva qual sera o procedimento" required="required">
+                              <label for="inicio">Fim da Consulta</label>
+                            </div>
                     </div>
                     <div class="form-group">
                             <div class="form-label-group">
                             <input type="text" id="procedimento" name='procedimento' class="form-control" placeholder="Descreva qual sera o procedimento" required="required">
                             <label for="procedimento">Procedimento</label>
                             </div>
+                    </div>
+                    <div class="form-group" id='resposta'>
+                            
                     </div>
                 </form>
             </div>
@@ -160,7 +171,7 @@
 <script src='../../componentes/fullcalendar-4.3.1/packages/list/main.js'></script>
 <script src='../../componentes/fullcalendar-4.3.1/packages/google-calendar/main.js'></script>
 <script src='../../componentes/fullcalendar-4.3.1/packages/core/locales/pt-br.js'></script>
-<script src='../../componentes/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'></script>
+<script src='../../componentes/timepicker/wickedpicker.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.6/js/bootstrap-select.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.6/css/bootstrap-select.min.css" rel="stylesheet" />
 
@@ -196,14 +207,6 @@
       // http://fullcalendar.io/docs/google_calendar/
       // googleCalendarApiKey: 'AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE',
 
-      // US Holidays
-      dayClick: function(date, jsEvent, view, resourceObj) {
-
-        alert('Date: ' + date.format());
-        alert('Resource ID: ' + resourceObj.id);
-
-      },
-
       eventClick: function(arg) {
         // opens events in a popup window
           $('.modal-title').html('Informações do Agendamento');
@@ -221,8 +224,10 @@
         $('#nomeProfissional').val('<?= $_SESSION['nome'];?>');
         $('#cancelarAgendamento').css('display', "none"); 
         $('#salvar').html("Cadastrar"); 
-        $('#data').val(info.start.toLocaleString());
+        
         $('#modalInfoAgendamento').modal('show');
+        var dataInit= moment(info.start).format('YYYY-MM-DD');
+        $('#data').val(dataInit);
       },
 
       loading: function(bool) {
@@ -236,7 +241,26 @@
   });
 
    $(function () {
-        
+        var optionsInicio = {
+        now: "00:00", //hh:mm 24 hour format only, defaults to current time
+        twentyFour: true,  //Display 24 hour format, defaults to false
+        upArrow: 'wickedpicker__controls__control-up',  //The up arrow class selector to use, for custom CSS
+        downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS
+        close: 'wickedpicker__close', //The close class selector to use, for custom CSS
+        hoverState: 'hover-state', //The hover state class to use, for custom CSS
+        title: 'Horario da consulta', //The Wickedpicker's title,
+        showSeconds: false, //Whether or not to show seconds,
+        timeSeparator: ':', // The string to put in between hours and minutes (and seconds)
+        secondsInterval: 1, //Change interval for seconds, defaults to 1,
+        minutesInterval: 30, //Change interval for minutes, defaults to 1
+        beforeShow: null, //A function to be called before the Wickedpicker is shown
+        afterShow: null, //A function to be called after the Wickedpicker is closed/hidden
+        show: null, //A function to be called when the Wickedpicker is shown
+        clearable: false, //Make the picker's input clearable (has clickable "x")
+    };
+        $('#timepicker-inicio').wickedpicker(optionsInicio); 
+        $('#timepicker-fim').wickedpicker(optionsInicio);
+        $(".wickedpicker").css("z-index","99999999");
         getPacientes();
 
     });
@@ -257,7 +281,7 @@
                   var resposta = JSON.parse(resposta);
                   console.log('resposta: ', resposta);
                   var select = '<select class="selectpicker" name="paciente" data-live-search="true">';
-                  select +='<option id="false" data-tokens="usuarios">Selecione um paciente</option>';
+                  select +='<option value="false" id="false" data-tokens="usuarios">Selecione um paciente</option>';
                   for(let usuarios in resposta){
                    select +='<option value='+resposta[usuarios].id+' data-tokens='+resposta[usuarios].id+'>'+resposta[usuarios].nome+'</option>';
                   }
@@ -277,21 +301,72 @@
    function cadastrarAgendamento(){
         console.log('cadastrar');
           event.preventDefault();
-          $.ajax({
-            method : "POST",
-            url: "../Controller/AgendamentoController.php",
-            data: $('#formAgendamento').serialize(),
-            contentyType: false,
-            processData: false,
-            success: function(retorno){
-              var result = JSON.parse(retorno);
-              console.log('result', result);
-            }
-          })
+          let data = validate();
+          console.log('data: ', data);
+          if(data){
+              $.ajax({
+                  method : "POST",
+                  url: "../Controller/AgendamentoController.php",
+                  data : {
+                    operation : data["operation"],
+                    idProfissional : data["idProfissional"],
+                    paciente : data["paciente"],
+                    data : data["data"],
+                    inicio : data["resultInicio"],
+                    fim : data["resultFim"],
+                    procedimento: data["procedimento"]
+                  }
+              }).done(function(resposta) {
+                    
+                    if(resposta){
+                      var resposta = JSON.parse(resposta);
+                      console.log('resposta: ', resposta);
+                    
+                    } 
+                
+              });
+          }
+
+          
+      
     
    }
 
+   function validate(){
+          let operation = $('#operation').val();
+          let idProfissional = $('#idProfissional').val();
+          let data = $('#data').val();
+          let inicio = $('#timepicker-inicio').val();
+          let fim = $('#timepicker-fim').val();
+          let procedimento = $('#procedimento').val();
+          let paciente = $('.selectpicker').val();
 
+          inicio = data+' '+inicio;
+          console.log('result inicio: ', inicio);
+          var dataInicio = new Date(inicio);
+          var resultInicio = moment(dataInicio).format('YYYY-MM-DD HH:mm:ss');
+
+          fim = data+' '+fim;
+          var dataFim = new Date(fim);
+          var resultFim = moment(dataFim).format('YYYY-MM-DD HH:mm:ss');
+
+          if(paciente != false && procedimento && inicio && fim){
+            var dados = {
+                      operation:operation, 
+                      idProfissional:idProfissional, 
+                      data:data,
+                      inicio:resultInicio,
+                      fim:resultFim,
+                      procedimento:procedimento,
+                      paciente:paciente};
+            return dados;
+          } else {
+              let mensagem =  `<div class="alert alert-danger" role="alert">
+                                    Selecione e preencha todos os campos!
+                              </div>`;
+              $('#resposta').html(mensagem);
+          }
+   }
 
 </script>
 
