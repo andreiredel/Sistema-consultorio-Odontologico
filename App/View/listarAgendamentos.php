@@ -63,16 +63,22 @@
         </div>
         <div class="modal-body">
         <div class="card-body">
-                <form id='formAgendamento'>
+                <form id='formAgendamento' action='../Controller/agendamentoController.php' method='POST'>
                     <input type="hidden" id='operation' name="operation" value=''>
+                    <input type="hidden" id='id_consulta' name="id_consulta" value=''>
                     <input type="hidden" id='idProfissional' name="idProfissional" value='<?= $_SESSION['id'] ?>'>
-                    <div class="form-group">
+                  <?php
+                       if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == 'profissional'){
+                  ?>        
+                      <div class="form-group">
                             <div class="form-label-group" id='select'>
-                            <!-- <input type="text" id="firstName" class="form-control" placeholder="Nome do Paciente" required="required" autofocus="autofocus">
-                            <label for="firstName">Nome Paciente</label> -->
                             
                             </div>
-                    </div>
+                    </div> 
+                <?php      
+                      }
+                  
+                  ?>
                     <div class="form-group">
                             <div class="form-label-group">
                             <input type="text" id="nomeProfissional" name='nomeProfissional' class="form-control" placeholder="Nome do Profissional" required="required" value='' disabled="disabled">
@@ -121,8 +127,8 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Voltar</button>
-          <button class="btn btn-danger" id='cancelarAgendamento' type="button" data-dismiss="modal">Cancelar Agendamento</button>
-          <button class="btn btn-primary" id='salvar' onclick=cadastrarAgendamento();>Salvar</button>
+          <button class="btn btn-danger" id='cancelarAgendamento' onclick=cancelarAgendamento();>Cancelar Agendamento</button>
+          <?= ($_SESSION['tipo'] == 'profissional')?'<button class="btn btn-primary" id="salvar" onclick=cadastrarAgendamento();>Salvar</button>' : ''?>
         </div>
       </div>
     </div>
@@ -211,14 +217,25 @@
         // opens events in a popup window
           $('.modal-title').html('Informações do Agendamento');
           $('#modalInfoAgendamento #procedimento').val(arg.event.title);
+          let dados = getDadosAgendamento(arg.event.id, '<?= $_SESSION['tipo']?>');
+          $('#id_consulta').val(arg.event.id);
+          
           console.log('dados: ', arg.event);
+          var data  = moment(arg.event.start).format('YYYY-MM-DD');
+          $('#data').val(data);
+          var inicioFormatada =  moment(arg.event.start).format('HH:mm');
+          $('#timepicker-inicio').val(inicioFormatada);
+          var fimFormatada =  moment(arg.event.end).format('HH:mm');
+          $('#timepicker-fim').val(fimFormatada);
           $('#operation').val('editar');
           $('#cancelarAgendamento').css('display', "inline");
           $('#salvar').html("Salvar"); 
           $('#modalInfoAgendamento').modal('show');
       },
-      selectable: true,
+      selectable: <?= ($_SESSION['tipo'] == 'profissional')? true : false ?>,
       select: function(info) {
+        document.getElementById("formAgendamento").reset();
+        console.log('reset');
         $('.modal-title').html('Cadastrar Agendamento');
         $('#operation').val('cadastrar');
         $('#nomeProfissional').val('<?= $_SESSION['nome'];?>');
@@ -228,6 +245,7 @@
         $('#modalInfoAgendamento').modal('show');
         var dataInit= moment(info.start).format('YYYY-MM-DD');
         $('#data').val(dataInit);
+        $('#data').attr('disabled','disabled');
       },
 
       loading: function(bool) {
@@ -312,24 +330,30 @@
                     idProfissional : data["idProfissional"],
                     paciente : data["paciente"],
                     data : data["data"],
-                    inicio : data["resultInicio"],
-                    fim : data["resultFim"],
+                    inicio : data["inicio"],
+                    fim : data["fim"],
                     procedimento: data["procedimento"]
                   }
               }).done(function(resposta) {
+                console.log("retorno: ", resposta);
+                var retorno = JSON.parse(resposta);
+                      console.log('resposta: ', retorno);
+                    if(retorno.status == 'success'){
+                      
+                      let mensagem =  `<div class="alert alert-${retorno.status}" role="alert">
+                                   ${retorno.mensagem}
+                              </div>`;
+                      $('#resposta').html(mensagem);
                     
-                    if(resposta){
-                      var resposta = JSON.parse(resposta);
-                      console.log('resposta: ', resposta);
-                    
+                    } else {
+                      let mensagem =  `<div class="alert alert-${retorno.status}" role="alert">
+                                   ${retorno.mensagem}
+                              </div>`;
+                      $('#resposta').html(mensagem);
                     } 
                 
               });
           }
-
-          
-      
-    
    }
 
    function validate(){
@@ -367,6 +391,38 @@
               $('#resposta').html(mensagem);
           }
    }
+
+   function cancelarAgendamento(){
+            $('#operation').val('cancelar');
+            $('#formAgendamento').submit();
+    }
+
+    function getDadosAgendamento(idAgendamento, tipoUsuario){
+              console.log('idAgendamento', idAgendamento);
+              $.ajax({
+                  method : "POST",
+                  url: "../Controller/AgendamentoController.php",
+                  data : {
+                    operation : 'getDadosAgendamento',
+                    idAgendamento: idAgendamento
+                  }
+              }).done(function(resposta) {
+                console.log("retornoAgendamento: ", resposta);
+                var retorno = JSON.parse(resposta);
+                    console.log('retornoAgendamento: ', retorno);
+                    $('#nomeProfissional').val(retorno.nomeprofissional);
+                    $('select[name=paciente]').val(retorno.idpaciente);
+                    $('.selectpicker').selectpicker('refresh');
+                    if(tipoUsuario == 'paciente'){
+                      $('#data').attr('disabled','disabled');
+                      $('#timepicker-inicio').attr('disabled','disabled');
+                      $('#timepicker-fim').attr('disabled','disabled');
+                      $('#procedimento').attr('disabled','disabled');
+                    }
+                    
+                    
+              });
+    }
 
 </script>
 

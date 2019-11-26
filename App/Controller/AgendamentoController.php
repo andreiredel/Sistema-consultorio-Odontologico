@@ -2,21 +2,24 @@
  session_start();
 require_once '../../vendor/autoload.php';
 
-var_dump('cadastrar agendamento');
-var_dump($_POST);
-
 $operation = filter_input(INPUT_POST, 'operation', FILTER_SANITIZE_STRING);
 
 switch($operation){
     case 'cadastrar':
         $retorno = cadastraAgendamento();
         echo json_encode($retorno);
-        break;
+    break;
+    case 'cancelar':
+        $retorno = cancelarAgendamento();
+    break;
+    case 'getDadosAgendamento';
+        $retorno = getDadosAgendamento();
+        echo json_encode($retorno);
+    break;
 
 }
 
 function cadastraAgendamento(){
-    var_dump('function cadastrar');
     $color ='#35A60D';
     $status = 'agendado';
     $agendamento = array(
@@ -38,7 +41,6 @@ function cadastraAgendamento(){
         $array = array('mensagem'=> $mensagem , 'status'=> $operation);
         return $array;
     }else{
-      
         $mensagem = 'Não foi possivel salvar os dados !!';
         $operation =  'danger';
         $array = array('mensagem'=> $mensagem , 'status'=> $operation);
@@ -46,4 +48,26 @@ function cadastraAgendamento(){
     }
     
 
+}
+
+function cancelarAgendamento()
+{
+        $color ='#EE2846';
+        $status = 'cancelado';
+        $agendamento = array(
+            "status" => $status,
+            "id" => filter_input(INPUT_POST, 'id_consulta', FILTER_SANITIZE_STRING),
+            "color" => $color      
+        );
+        $agendamentoDao = new App\Dao\AgendamentoDao();
+        $retorno = $agendamentoDao->cancelar($agendamento);
+        header("Location: ../view/listarAgendamentos.php");
+
+}
+
+function getDadosAgendamento(){
+    $idAgendamento = filter_input(INPUT_POST, 'idAgendamento', FILTER_SANITIZE_STRING);
+    $agendamentoDao = new App\Dao\AgendamentoDao();
+    $retorno = $agendamentoDao->getDadosAgendamento($idAgendamento);      
+    return $retorno;
 }

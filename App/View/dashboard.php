@@ -30,25 +30,9 @@
     <?php
         }
     ?>
-      <div class="card mb-3">
-          <div class="col-12 col-md-10 col-lg-8" style="margin: auto;">
-          <div class="form-group">
-                          <div class='input-group date' id='datetimepicker3'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <i class="fas fa-sign-out"></i>
-                            </span>
-                          </div>
-                    </div>
-          </div>
+      <div class="card mb-3">    
           <!--end of col-->
         </div>
-
-
-
-
-
-
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
