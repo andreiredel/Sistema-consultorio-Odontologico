@@ -21,7 +21,7 @@
   <link href="../../css/sb-admin.css" rel="stylesheet">
   <link href="../../css/geral.css" rel="stylesheet">
   <link href="../../css/cadastrarUsuario.css" rel="stylesheet">
-  <link href="../../componentes/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <link href="../../componentes/timepicker/wickedpicker.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">

@@ -42,7 +42,7 @@
             if(isset($_SESSION['tipo'])){
               if($_SESSION['tipo'] == 'profissional'){
       ?>
-        <a class="dropdown-item" href="cadastrarAgendamento.php">Cadastrar</a>
+        <!-- <a class="dropdown-item" href="cadastrarAgendamento.php">Cadastrar</a> -->
         <a class="dropdown-item" href="listarAgendamentos.php">Listar</a>
 
       <?php
