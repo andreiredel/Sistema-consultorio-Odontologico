@@ -420,7 +420,6 @@
                       $('#procedimento').attr('disabled','disabled');
                     }
                     
-                    
               });
     }
 

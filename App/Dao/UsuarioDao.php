@@ -101,7 +101,6 @@ class UsuarioDao{
 
         $sql = "SELECT  id_".$tabela." as id, nome, tipousuario FROM ". $tabela. " where nome ilike '%".$palavra."%'";
         
-
         $stmt = $this->connect->getInstance()->prepare($sql);
         if($stmt->execute()){
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

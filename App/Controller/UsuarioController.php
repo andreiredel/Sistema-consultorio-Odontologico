@@ -163,19 +163,26 @@ function buscarUsuarios()
 {
 
     $palavra = filter_input(INPUT_POST, 'palavra', FILTER_SANITIZE_STRING);
-
-
+    $servicoProntuario = (filter_input(INPUT_POST, 'servico', FILTER_SANITIZE_STRING))? true : false;
+    var_dump($_POST);
+    var_dump($servicoProntuario);
     $usuarioDao = new App\Dao\UsuarioDao();
     $listaPaciente = $usuarioDao->buscaPorNomeUsuario('paciente', $palavra);
+    if($servicoProntuario){
+        var_dump('teste');
+        var_dump($result);
+        $result = $listaPaciente;
+        $_SESSION['buscaUsuarios'] = $result;
+        header("Location: ../view/prontuario.php");
+    } else {
+        $listaProfissional = $usuarioDao->buscaPorNomeUsuario('profissional', $palavra);
+        $result = array_merge($listaPaciente, $listaProfissional);
+        $_SESSION['buscaUsuarios'] = $result;
+        header("Location: ../view/listarUsuario.php");
+        return $result;
+    }
 
-    $listaProfissional = $usuarioDao->buscaPorNomeUsuario('profissional', $palavra);
-
-    $result = array_merge($listaPaciente, $listaProfissional);
-  
-
-    $_SESSION['buscaUsuarios'] = $result;
-    header("Location: ../view/listarUsuario.php");
-    return $result;
+   
 
 }
 

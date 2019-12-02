@@ -6,6 +6,12 @@
     include 'menuLateral.php';
     mostraAlerta();
     
+        // die;
+    $dadosProntuario = $_SESSION["dadosProntuario"];
+    echo '<pre>dadosProntuario';
+        print_r($dadosProntuario);
+        echo'</pre>';
+
 ?>
     <div id="content-wrapper">
 
@@ -24,12 +30,16 @@
         <div class="card-body">
                     <div class="col-md-12">
                             <div class="">
-                            <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-cloud-download-alt"></i> Gerar PDF</button>
+                            <button class="btn btn-md btn-primary" type="button" onclick='CriaPDF();'><i class="fas fa-cloud-download-alt"></i> Gerar PDF</button>
                             </div>
                     </div>
             </div>
-            <div class="card-body">
-            <form action="mail.php" method="post">
+            <div class="card-body" id='prontuarioCompleto'>
+            <!-- <form action="mail.php" method="post"> -->
+            <?php
+                    if(isset($dadosProntuario) && !empty($dadosProntuario['dados_pessoais'])){
+                      $dadosPessoais = $dadosProntuario['dados_pessoais'];
+            ?>
                         <div class="card border-primary rounded-0">
                             <div class="card-header p-0">
                                 <div class="bg-info text-white text-center py-2">
@@ -42,144 +52,96 @@
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Nome:</label>
+                                        <span class="descricao" style='font-weight: 700;'>Nome : </span><span class='valor'>teste</span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>RG:</label>
+                                        <div class="group">
+                                            <span class="descricao">RG : </span><span class='valor'><?= $dadosPessoais['rg']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Órgão expedidor:</label>
+                                            <span class="descricao">Órgão expedidor: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>CPF:</label>
+                                            <span class="descricao">CPF: </span><span class='valor'><?= $dadosPessoais['cpf']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Data de Nascimento:</label>
+                                        <span class="descricao">Data de Nascimento: </span><span class='valor'><?= $dadosPessoais['data_nascimento']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label> Gênero:</label>
+                                        <span class="descricao">Gênero: </span><span class='valor'><?= $dadosPessoais['genero']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>E-mail:</label>
+                                        <span class="descricao">E-mail: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Naturalidade:</label>
+                                        <span class="descricao">Naturalidade: </span><span class='valor'><?= $dadosPessoais['naturalidade']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Nacionalidade:</label>
+                                        <span class="descricao">Nacionalidade: </span><span class='valor'><?= $dadosPessoais['nacionalidade']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Estado civil:</label>
+                                        <span class="descricao">Estado civil: </span><span class='valor'><?= $dadosPessoais['estado_civil']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label> Profissão:</label>
+                                        <span class="descricao">Profissão: </span><span class='valor'><?= $dadosPessoais['profissao']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Endereço residencial:</label>
+                                        <span class="descricao">Endereço residencial: </span><span class='valor'><?= $dadosPessoais['end_residencial']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>CEP:</label>
+                                        <span class="descricao">CEP: </span><span class='valor'><?= $dadosPessoais['cep']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Cidade:</label>
+                                        <span class="descricao">Cidade: </span><span class='valor'><?= $dadosPessoais['cidade']?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='row'>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Estado:</label>
+                                        <span class="descricao">Estado: </span><span class='valor'><?= $dadosPessoais['estado']?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="group">      
-                                            <input type="text" required>
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label>Telefones:</label>
+                                            <span class="descricao">Telefone: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +149,358 @@
                             </div>
 
                         </div>
-                    </form>
+                    <?php   
+                    }
+                    ?>
+                    <?php
+                    if(isset($dadosProntuario) && !empty($dadosProntuario['dados_pessoais'])){
+                      $dadosPessoais = $dadosProntuario['dados_pessoais'];
+            ?>
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3></i>ANAMNESE</h3>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                                <!--Body-->
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao" style='font-weight: 700;'>Nome : </span><span class='valor'>teste</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">
+                                            <span class="descricao">RG : </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Órgão expedidor: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">CPF: </span><span class='valor'><?= $dadosPessoais['cpf']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Data de Nascimento: </span><span class='valor'><?= $dadosPessoais['data_nascimento']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Gênero: </span><span class='valor'><?= $dadosPessoais['genero']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">E-mail: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Naturalidade: </span><span class='valor'><?= $dadosPessoais['naturalidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Nacionalidade: </span><span class='valor'><?= $dadosPessoais['nacionalidade']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado civil: </span><span class='valor'><?= $dadosPessoais['estado_civil']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Profissão: </span><span class='valor'><?= $dadosPessoais['profissao']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Endereço residencial: </span><span class='valor'><?= $dadosPessoais['end_residencial']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">CEP: </span><span class='valor'><?= $dadosPessoais['cep']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Cidade: </span><span class='valor'><?= $dadosPessoais['cidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado: </span><span class='valor'><?= $dadosPessoais['estado']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Telefone: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                    <?php   
+                    }
+                    ?>
+                    <?php
+                    if(isset($dadosProntuario) && !empty($dadosProntuario['dados_pessoais'])){
+                      $dadosPessoais = $dadosProntuario['dados_pessoais'];
+            ?>
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3></i>EXAME FÍSICO</h3>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                                <!--Body-->
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao" style='font-weight: 700;'>Nome : </span><span class='valor'>teste</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">
+                                            <span class="descricao">RG : </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Órgão expedidor: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">CPF: </span><span class='valor'><?= $dadosPessoais['cpf']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Data de Nascimento: </span><span class='valor'><?= $dadosPessoais['data_nascimento']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Gênero: </span><span class='valor'><?= $dadosPessoais['genero']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">E-mail: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Naturalidade: </span><span class='valor'><?= $dadosPessoais['naturalidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Nacionalidade: </span><span class='valor'><?= $dadosPessoais['nacionalidade']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado civil: </span><span class='valor'><?= $dadosPessoais['estado_civil']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Profissão: </span><span class='valor'><?= $dadosPessoais['profissao']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Endereço residencial: </span><span class='valor'><?= $dadosPessoais['end_residencial']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">CEP: </span><span class='valor'><?= $dadosPessoais['cep']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Cidade: </span><span class='valor'><?= $dadosPessoais['cidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado: </span><span class='valor'><?= $dadosPessoais['estado']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Telefone: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                    <?php   
+                    }
+                    ?>
+                    <?php
+                    if(isset($dadosProntuario) && !empty($dadosProntuario['dados_pessoais'])){
+                      $dadosPessoais = $dadosProntuario['dados_pessoais'];
+            ?>
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3></i>EXAME CLÍNICO</h3>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                                <!--Body-->
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao" style='font-weight: 700;'>Nome : </span><span class='valor'>teste</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">
+                                            <span class="descricao">RG : </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Órgão expedidor: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">CPF: </span><span class='valor'><?= $dadosPessoais['cpf']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Data de Nascimento: </span><span class='valor'><?= $dadosPessoais['data_nascimento']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Gênero: </span><span class='valor'><?= $dadosPessoais['genero']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">E-mail: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Naturalidade: </span><span class='valor'><?= $dadosPessoais['naturalidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Nacionalidade: </span><span class='valor'><?= $dadosPessoais['nacionalidade']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado civil: </span><span class='valor'><?= $dadosPessoais['estado_civil']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Profissão: </span><span class='valor'><?= $dadosPessoais['profissao']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Endereço residencial: </span><span class='valor'><?= $dadosPessoais['end_residencial']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">CEP: </span><span class='valor'><?= $dadosPessoais['cep']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Cidade: </span><span class='valor'><?= $dadosPessoais['cidade']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                        <span class="descricao">Estado: </span><span class='valor'><?= $dadosPessoais['estado']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="group">      
+                                            <span class="descricao">Telefone: </span><span class='valor'><?= $dadosPessoais['rg']?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                    <?php   
+                    }
+                    ?>
+                    <!-- </form> -->
             </div>
         
       </fieldset>
@@ -227,39 +540,25 @@
   <script type="text/javascript" src="../../css/bootstrap/datetimepicker/datetimepicker.min.js"></script>
 
     <script>
-        $('#radioBtn label').on('click', function(e){
-          var sel = $(this).data('title');
-          var tog = $(this).data('toggle');
-          console.log("sel: ", sel);
-          console.log("tog: ", tog);
-          $('#'+tog).prop('value', sel);
-          
-          $('label[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
-          $('label[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
-        }) 
-
-        $(document).ready(function(){
-
-          $('#modalExemplo').modal('show');
-          
-          $('#showPassword').on('click', function(){
-
-            console.log('teste');
-            
-            var passwordField = $('#senha');
-            var passwordFieldType = passwordField.attr('type');
-            if(passwordFieldType == 'password')
-            {
-                passwordField.attr('type', 'text');
-                $(this).val('Hide');
-                $('#showPassword').attr("class", 'fa fa-eye');
-            } else {
-                passwordField.attr('type', 'password');
-                $(this).val('Show');
-                $('#showPassword').attr("class", 'fa fa-eye-slash');
-            }
-          });
-        }); 
+        function CriaPDF() {
+        var minhaTabela = document.getElementById('prontuarioCompleto').innerHTML;
+        // var style = "<style>";
+        // style = style + "table {width: 100%;font: 20px Calibri;}";
+        // style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        // style = style + "padding: 2px 3px;text-align: center;}";
+        // style = style + "</style>";
+        // CRIA UM OBJETO WINDOW
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write('<html><head>');
+        win.document.write('<title>Prontuario</title>');   // <title> CABEÇALHO DO PDF.
+        // win.document.write(style);                                     // INCLUI UM ESTILO NA TAB HEAD
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(minhaTabela);                          // O CONTEUDO DA TABELA DENTRO DA TAG BODY
+        win.document.write('</body></html>');
+        win.document.close(); 	                                         // FECHA A JANELA
+        win.print();                                                            // IMPRIME O CONTEUDO
+    }
 
     </script>
     <style>
