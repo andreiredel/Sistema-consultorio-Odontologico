@@ -1,9 +1,13 @@
 <?php
   session_start();
   require_once '../../vendor/autoload.php';
+  require_once 'Alertas.php';
   include 'header.php';
   include 'menuLateral.php';
-
+        echo '<pre>sessio';
+        print_r($_SESSION);
+        echo'</pre>';
+  mostraAlerta();
 ?>
     <div id="content-wrapper">
 
@@ -92,22 +96,12 @@
                           </div>
                     </div>
                     <div class="form-group">
-                            <!-- <div class="form-label-group">
-                              <input type="text" id="inicio" name='inicio' class="form-control" placeholder="Informe a hora de inicio" required="required" >
-                              <label for="inicio">Hora de inicio</label>
-                            </div> -->
                             <div class="form-label-group content__subsection picker-container">
                               <input type="text" id="timepicker-inicio" name="inicio" class="form-control timepicker-24-hr" placeholder="Descreva qual sera o procedimento" required="required">
                               <label for="inicio">Inicio da consulta</label>
                             </div>
                     </div>
                     <div class="form-group">
-                          <!-- <div class='input-group date' id=''>
-                            <input type='text' name='fim' id='fim' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="fas fa-alarm-clock"></span>
-                            </span>
-                          </div> -->
                           <div class="form-label-group content__subsection picker-container">
                               <input type="text" id="timepicker-fim" name="fim" class="form-control timepicker-24-hr" placeholder="Descreva qual sera o procedimento" required="required">
                               <label for="inicio">Fim da Consulta</label>
@@ -119,16 +113,53 @@
                             <label for="procedimento">Procedimento</label>
                             </div>
                     </div>
-                    <div class="form-group" id='resposta'>
-                            
+                    <?php
+                       if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == 'profissional'){
+                  ?>        
+                      <div class="form-group" id='status'>
+                          <label for="tipoUsuario">Status Agendamento: </label>
+                        <div class="btn-group" id="radioBtn" data-toggle="buttons">
+                               <label class="btn btn-primary active" data-toggle="tipo" data-title="Profissional">
+                                  <input type="radio" name="status" id="option2" value='agendado' autocomplete="off" checked>
+                                  <span class="fas fa-check"></span>
+                                  <span class="tipo"> Agendado</span>
+                                </label>
+                              <label class="btn btn-primary notActive" data-toggle="tipo" data-title="Paciente">
+                                <input type="radio" name="status" id="option1" value='cancelado' autocomplete="off">
+                                <span class="fas fa-check"></span>
+                                <span class="tipo"> Cancelado</span>
+                              </label>
+                          </div>  
                     </div>
+                <?php      
+                      }
+                ?>
                 </form>
             </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Voltar</button>
-          <button class="btn btn-danger" id='cancelarAgendamento' onclick=cancelarAgendamento();>Cancelar Agendamento</button>
+          <button class="btn btn-danger" id='cancelarAgendamento' type='submit' data-toggle="modal" data-target="#modalCancelAgendamento">Cancelar Agendamento</button>
           <?= ($_SESSION['tipo'] == 'profissional')?'<button class="btn btn-primary" id="salvar" onclick=cadastrarAgendamento();>Salvar</button>' : ''?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="modalCancelAgendamento" tabindex="-1" role="dialog" aria-labelledby="modalCancelAgendamento" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5> -->
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align:center;">Deseja realmente cancelar agendamento?</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Sair</button>
+          <button class="btn btn-danger" type="button" onclick=cancelarAgendamento();>Sim</button>
         </div>
       </div>
     </div>
@@ -232,7 +263,9 @@
           $('#salvar').html("Salvar"); 
           $('#modalInfoAgendamento').modal('show');
       },
-      selectable: <?= ($_SESSION['tipo'] == 'profissional')? true : false ?>,
+      selectable: <?= ($_SESSION['tipo'] == 'profissional')? 'true' : 'false' ?>,
+      
+      
       select: function(info) {
         document.getElementById("formAgendamento").reset();
         console.log('reset');
@@ -242,10 +275,14 @@
         $('#cancelarAgendamento').css('display', "none"); 
         $('#salvar').html("Cadastrar"); 
         
-        $('#modalInfoAgendamento').modal('show');
         var dataInit= moment(info.start).format('YYYY-MM-DD');
+        console.log("minutos",moment(info.start).format('HH:mm'));
+        let horas = moment(info.start).format('HH:mm');
+        $('#timepicker-inicio').val(horas);
+        $('#timepicker-fim').val(horas);
         $('#data').val(dataInit);
         $('#data').attr('disabled','disabled');
+        $('#modalInfoAgendamento').modal('show');
       },
 
       loading: function(bool) {
@@ -259,6 +296,10 @@
   });
 
    $(function () {
+
+        $('#modalExemplo').modal('show');
+
+
         var optionsInicio = {
         now: "00:00", //hh:mm 24 hour format only, defaults to current time
         twentyFour: true,  //Display 24 hour format, defaults to false
@@ -321,6 +362,8 @@
           event.preventDefault();
           let data = validate();
           console.log('data: ', data);
+          let status = $('input[name=status]:checked').val();
+          let idConsulta = $('#id_consulta').val();
           if(data){
               $.ajax({
                   method : "POST",
@@ -332,24 +375,16 @@
                     data : data["data"],
                     inicio : data["inicio"],
                     fim : data["fim"],
-                    procedimento: data["procedimento"]
+                    procedimento: data["procedimento"],
+                    status: status,
+                    id_consulta : idConsulta
                   }
               }).done(function(resposta) {
                 console.log("retorno: ", resposta);
                 var retorno = JSON.parse(resposta);
                       console.log('resposta: ', retorno);
-                    if(retorno.status == 'success'){
-                      
-                      let mensagem =  `<div class="alert alert-${retorno.status}" role="alert">
-                                   ${retorno.mensagem}
-                              </div>`;
-                      $('#resposta').html(mensagem);
-                    
-                    } else {
-                      let mensagem =  `<div class="alert alert-${retorno.status}" role="alert">
-                                   ${retorno.mensagem}
-                              </div>`;
-                      $('#resposta').html(mensagem);
+                    if(retorno){
+                      window.location.href = "listarAgendamentos.php";
                     } 
                 
               });
@@ -422,6 +457,17 @@
                     
               });
     }
+
+    $('#radioBtn label').on('click', function(e){
+          var sel = $(this).data('title');
+          var tog = $(this).data('toggle');
+          console.log("sel: ", sel);
+          console.log("tog: ", tog);
+          $('#'+tog).prop('value', sel);
+          
+          $('label[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+          $('label[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+        }) 
 
 </script>
 

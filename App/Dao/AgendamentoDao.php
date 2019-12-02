@@ -38,8 +38,27 @@ class AgendamentoDao{
 
     public function create($agendamento)
     {
-        $sql = "INSERT INTO consulta (status, inicio, descricao_tratamento, id_paciente, id_profissional, fim, color, data )".   
+
+        $sql = "INSERT INTO  consulta (status, inicio, descricao_tratamento, id_paciente, id_profissional, fim, color, data )".   
         "VALUES ('".$agendamento['status']."','".$agendamento['inicio']."','".$agendamento['descricao']."' , '".$agendamento['IdPaciente']."','".$agendamento['idProfissional']."','".$agendamento['fim']."', '".$agendamento['color']."', '".$agendamento['data']."')";
+ 
+        
+        $stmt = $this->connect->getInstance()->prepare($sql);
+        if($stmt->execute()){
+            return true;
+        }else{
+            $stmt->errorInfo();
+            return false;
+        }
+    }
+
+    public function update($agendamento)
+    {
+        
+
+        $sql = "UPDATE consulta SET status = '".$agendamento['status']."' , inicio = '".$agendamento['inicio']."' , descricao_tratamento =  '".$agendamento['descricao']."' , id_paciente ='".$agendamento['IdPaciente']."' , id_profissional = '".$agendamento['idProfissional']."', fim = '".$agendamento['fim']."' , color =  '".$agendamento['color']."', data = '".$agendamento['data']."' ".
+        "WHERE id_consulta = ".$agendamento['id_consulta']; 
+        
         $stmt = $this->connect->getInstance()->prepare($sql);
         if($stmt->execute()){
             return true;

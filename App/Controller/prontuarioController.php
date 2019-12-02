@@ -4,8 +4,10 @@ require_once '../../vendor/autoload.php';
 
    
 $operation = filter_input(INPUT_POST, 'operation', FILTER_SANITIZE_STRING);
-$operation = filter_input(INPUT_GET, 'operation', FILTER_SANITIZE_STRING);
 
+if(isset($_GET) && filter_input(INPUT_GET, 'operation', FILTER_SANITIZE_STRING)){
+    $operation = filter_input(INPUT_GET, 'operation', FILTER_SANITIZE_STRING);
+}
 
 
 switch($operation){
@@ -34,6 +36,10 @@ switch($operation){
     case 'getDadosCompleto':
         $retorno = getDadosCompleto();
     break;
+    case 'editarDadosPessoais':
+        $retorno = editarDadosPessoais();
+    break;
+
     
     
     
@@ -93,12 +99,6 @@ function getDadosProntuario(){
         $_SESSION['info'] = $retorno;
         return true;
     }
-}
-function getProntuario($idPaciente){
-            var_dump('teste');
-            var_dump($idPaciente);
-            die();
-
 }
 
 function cadastrarAnamnese(){
@@ -284,6 +284,50 @@ function getDadosCompleto(){
         $_SESSION['statusModal'] =  'danger';
         header("Location: ../view/visualizacaoProntuario.php");
     }
+
+}
+
+function editarDadosPessoais()
+{
+     
+    $dados = array(
+        "idPaciente" => filter_input(INPUT_POST, 'idPaciente', FILTER_SANITIZE_STRING),
+        "rg" => filter_input(INPUT_POST, 'rg', FILTER_SANITIZE_STRING),
+        "orgaoEx" => filter_input(INPUT_POST, 'orgaoEx', FILTER_SANITIZE_STRING),
+        "cpf" => filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_STRING),
+        "nascimento" => filter_input(INPUT_POST, 'nascimento', FILTER_SANITIZE_STRING),
+        "estado_civil" => filter_input(INPUT_POST, 'estado_civil', FILTER_SANITIZE_STRING),
+        "naturalidade" => filter_input(INPUT_POST, 'naturalidade', FILTER_SANITIZE_STRING),
+        "nacionalidade" => filter_input(INPUT_POST, 'nacionalidade', FILTER_SANITIZE_STRING),
+        "profissao" => filter_input(INPUT_POST, 'profissao', FILTER_SANITIZE_STRING),
+        "endereco" => filter_input(INPUT_POST, 'endereco', FILTER_SANITIZE_STRING),
+        "cep" => filter_input(INPUT_POST, 'cep', FILTER_SANITIZE_STRING),
+        "cidade" => filter_input(INPUT_POST, 'cidade', FILTER_SANITIZE_STRING),
+        "estado" => filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING),
+        "telefone" => filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING),
+        "cor" => filter_input(INPUT_POST, 'cor', FILTER_SANITIZE_STRING),
+        "moradia" => filter_input(INPUT_POST, 'moradia', FILTER_SANITIZE_STRING),
+        "genero" => filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING)
+     
+    );
+
+    $prontuariDao = new App\Dao\ProntuarioDao();
+    $retorno =  $prontuariDao->editarDadosPessoais($dados);
+    var_dump("retorno");
+    var_dump($retorno);
+    // die;
+    if($retorno){
+        $_SESSION['nome'] = $dados['nome'];
+        $_SESSION['mensagemModal'] = 'Dados pessoais salvo com sucesso !!';
+        $_SESSION['statusModal'] =  'success';
+        header("Location: ../view/EditarProntuario.php");
+    }else{
+        
+        $_SESSION['mensagemModal'] = 'Não foi possivel salvar os dados !!';
+        $_SESSION['statusModal'] =  'danger';
+        header("Location: ../view/EditarProntuario.php");
+    }
+
 
 }
 

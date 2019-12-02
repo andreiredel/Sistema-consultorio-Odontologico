@@ -70,7 +70,7 @@
       <?php
               }else{
       ?>
-            <a class="dropdown-item" href="visualizacaoProntuario.php">Visualizar prontuário</a>
+            <a class="dropdown-item" href="../Controller/prontuarioController.php?operation=getDadosCompleto&idPaciente=<?=$_SESSION['id']?>">Visualizar prontuário</a>
       <?php
               }
             }

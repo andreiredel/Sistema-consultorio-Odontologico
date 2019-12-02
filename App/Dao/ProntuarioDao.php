@@ -252,7 +252,7 @@ class ProntuarioDao{
                    
     }
 
-    public function getDadosCompleto($tabela, $condicao)
+    function getDadosCompleto($tabela, $condicao)
     {
         
         $sql ="SELECT * FROM ".
@@ -271,6 +271,25 @@ class ProntuarioDao{
             return false;
         }
                    
+    }
+
+    public function editarDadosPessoais($dados)
+    {
+        $sql = "UPDATE  dados_pessoais SET profissao = '".$dados['profissao']."', end_residencial = '".$dados['endereco']."', estado_civil = '".$dados['estado_civil']."', cep = '".$dados['cep']."', cidade = '".$dados['cidade']."', cor_raca = '".$dados['cor']."', estado = '".$dados['estado']."',data_nascimento = '".$dados['nascimento']."', cpf = '".$dados['cpf']."', nacionalidade = '".$dados['nacionalidade']."', naturalidade = '".$dados['naturalidade']."', rg = '".$dados['rg']."', genero = '".$dados['genero']."', id_paciente = '".$dados['idPaciente']."', moradia = '".$dados['moradia']."'";
+        echo '<pre>sql';
+        print_r($sql);
+        echo'</pre>';
+    $stmt = $this->connect->getInstance()->prepare($sql);
+    if($stmt->execute()){
+        return  true;
+    }else{
+        echo "<pre>sqllll";
+            print_r($stmt->errorInfo());
+        echo "</pre>";
+        return false;
+    }
+
+
     }
 
     
