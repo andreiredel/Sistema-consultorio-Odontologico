@@ -292,5 +292,26 @@ class ProntuarioDao{
 
     }
 
+    public function getTodosOsDados($tabela, $condicao)
+    {
+        
+        $sql ="SELECT * FROM ".
+        $tabela.
+        " where id_paciente = ". $condicao;
+        $stmt = $this->connect->getInstance()->prepare($sql);  
+        // echo '<pre>sql';
+        // print_r($sql);
+        // echo'</pre>';
+        // die;
+        if($stmt->execute()){
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        }else{
+            $stmt->errorInfo();
+            return false;
+        }
+                   
+    }
+
     
 }

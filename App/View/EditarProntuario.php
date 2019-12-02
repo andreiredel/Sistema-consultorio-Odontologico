@@ -22,13 +22,13 @@
     $displayExamePeriodontal = (isset($arrayDadosProntuario['examePeriodontal']) && !empty($arrayDadosProntuario['examePeriodontal']))? 'disabled' :'' ;
     $arrayDadosProntuario['registro'] =  $prontuarioDao->getDadosCompleto("registro_atendimento",$_SESSION['info']['idpaciente']);
     $displayRegistro = (isset($arrayDadosProntuario['registro']) && !empty($arrayDadosProntuario['registro']))? 'disabled' :'' ;
-    echo '<pre>examePeriodontal';
-    print_r($arrayDadosProntuario['examePeriodontal']);
-    echo'</pre>';
+    
     $operation = (isset($dadosProntuario) && !empty($dadosProntuario))? "editarDadosPessoais" : "cadastrarDadosPessoais";
 
-
-    
+    $arrayDadosProntuario['registro'] =  $prontuarioDao->getTodosOsDados("registro_atendimento", $_SESSION['info']['idpaciente']);
+    echo '<pre>registro';
+    print_r($arrayDadosProntuario['registro']);
+    echo'</pre>';
 ?>
     <style>
         
@@ -380,8 +380,13 @@
                                         <div class="row">
                                             <div class="form-group col-md-12">
                                                 <div class="form-label-group" style="float: right;">
-                                                    <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Salvar</button>
-                                                </div>
+                                                <?php
+                                                    if(!isset($arrayDadosProntuario['exameFisico']) && empty($arrayDadosProntuario['anamnese'])){
+                                                 ?>
+                                                        <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-edit"></i> Salvar</button>
+                                                <?php
+                                                    }
+                                                ?>                                                 </div>
                                             </div>
                                         </div>
                                     
@@ -430,7 +435,13 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="form-label-group" style="float: right;">
-                                                <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Salvar</button>
+                                            <?php
+                                                    if(!isset($arrayDadosProntuario['exameFisico']) && empty($arrayDadosProntuario['exameFisico'])){
+                                                 ?>
+                                                        <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-edit"></i> Salvar</button>
+                                                <?php
+                                                    }
+                                                ?> 
                                             </div>
                                         </div>
                                     </div>
@@ -465,8 +476,14 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="form-label-group" style="float: right;">
-                                           
-                                                <button class="btn btn-md btn-primary" type="submit" data-toggle="modal" data-target="#modalEditar"><i class="fas fa-edit"></i> Salvar</button>
+                                                <?php
+                                                    if(!isset($arrayDadosProntuario['exameFisico']) && empty($arrayDadosProntuario['exameClinico'])){
+                                                 ?>
+                                                        <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-edit"></i> Salvar</button>
+                                                <?php
+                                                    }
+                                                ?> 
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -535,7 +552,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                                 <div class="form-label-group">
-                                                <input type="text" id="observacoes" name="observacoes" class="form-control" placeholder="Observações" required="required" <?= $displayExamePeriodontal ?> <?= (isset($arrayDadosProntuario['examePeriodontal']) && $arrayDadosProntuario['examePeriodontal']['observacoes'])? 'checked' :''?>>
+                                                <input type="text" id="observacoes" name="observacoes" class="form-control" placeholder="Observações" required="required" <?= $displayExamePeriodontal ?> value="<?= (isset($arrayDadosProntuario['examePeriodontal']) && !empty($arrayDadosProntuario['examePeriodontal']))? $arrayDadosProntuario['examePeriodontal']['observacoes'] :''?>">
                                                 <label for="observacoes">Observações:</label>
                                                 </div>
                                         </div>
@@ -544,8 +561,13 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="form-label-group" style="float: right;">
-                                                <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-edit"></i> Salvar</button>
-                                            </div>
+                                            <?php
+                                                    if(!isset($arrayDadosProntuario['exameFisico']) && empty($arrayDadosProntuario['examePeriodontal'])){
+                                                 ?>
+                                                        <button class="btn btn-md btn-primary" type="submit"><i class="fas fa-edit"></i> Salvar</button>
+                                                <?php
+                                                    }
+                                                ?>                                              </div>
                                         </div>
                                     </div>
                                     
@@ -596,27 +618,33 @@
                                                 <th>Operação</th>
                                                 <th>Usuário</th>
                                                 <th>Descrição</th>
+                                                <th>Ação</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>12/09/2019</td>
-                                                <td>Insert</td>
-                                                <td>Dr Pedro</td>
-                                                <td>Limpeza</td>
-                                            </tr>
-                                            <tr>
-                                                <td>18/09/2019</td>
-                                                <td>Update</td>
-                                                <td>Dr Carlos</td>
-                                                <td>Limpeza 2</td>
-                                            </tr>
-                                            <tr>
-                                                <td>22/09/2019</td>
-                                                <td>Delete</td>
-                                                <td>Dr Paulo</td>
-                                                <td>Limpeza 3</td>
-                                            </tr>
+                                            <?php
+                                                 if(isset($arrayDadosProntuario['registro']) && !empty($arrayDadosProntuario['registro'])){
+
+                                                        foreach($arrayDadosProntuario['registro'] as $registro){
+                                                ?> 
+                                                    <tr>
+                                                        <td><?= $registro['data']?></td>
+                                                        <td><?= $registro['descricao']?></td>
+                                                        <td ><?= $registro['idatendimento']?></td>
+                                                        <td><?= $registro['id_paciente']?></td>
+                                                        <td>
+                                                        <button class="btn btn-md btn-primary" onclick="buscarDados(<?= $usuarios['id'] ?>, '<?= $usuarios['tipousuario'] ?>');"><i class="fas fa-edit"></i> Editar</button>
+                                                        <button class="btn btn-md btn-danger" onclick="buscarDados(<?= $usuarios['id'] ?>, '<?= $usuarios['tipousuario'] ?>');"><i class="fas fa-close"></i> Excluir</button>
+                                                        </td>
+                                                    </tr>
+                                                <?php
+                                                        }
+                                                 }               
+                                            ?>
+                                           
+                                                
+                                            
+                                            
                                             </tbody>
                                         </table>
                                         </div>
@@ -690,7 +718,8 @@
             $("#dataClinico").mask("99-99-9999",{placeholder:"99/99/9999"});
             $("#dataPerio").mask("99-99-9999",{placeholder:"99/99/9999"});
             $("#dataRegistro").mask("99-99-9999",{placeholder:"99/99/9999"});
-
+            var data = moment().format('DD-MM-YYYY');
+            $("#dataRegistro").val(data);
             
            
         })();
